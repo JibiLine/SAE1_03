@@ -13,6 +13,7 @@ then
     if [ -f "$1" ]
     then
 
+    sudo mkdir -p "/home/partageChefs";
     while IFS=";" read -r name firstname password department
     do
 
@@ -32,30 +33,29 @@ then
 
             if ! grep "^$department:" /etc/group
             then
-                sudo groupadd "$department"
+                sudo groupadd "$department";
 
-                sudo mkdir -p "/home/partage$department"
-                sudo mkdir -p "/home/$department"
-                sudo mkdir -p "/home/partageChefs"
+                sudo mkdir -p "/home/partage$department";
+                sudo mkdir -p "/home/$department";
 
-                sudo useradd -d "/home/$department/$user" -c "$firstname $name" "$user"
-                echo -e "$password\n$password" | sudo passwd "$user"
+                sudo useradd -d "/home/$department/$user" -c "$firstname $name" "$user";
+                echo -e "$password\n$password" | sudo passwd "$user";
 
-                sudo adduser "$user" "$department"
-                sudo adduser "$user" "admin"
+                sudo adduser "$user" "$department";
+                sudo adduser "$user" "admin";
 
-                sudo chown ":$department" "/home/$department"
-                sudo chown ":$department" "/home/partage$department"
-                sudo ln -sf "/home/partage$department" "/home/$department/$user"
-                sudo ln -sf "/home/partageChefs" "/home/$department/$user"
+                sudo chown ":$department" "/home/$department/";
+                sudo chown ":$department" "/home/partage$department/";
+                sudo ln -s "/home/partage$department" "/home/$department/$user";
+                sudo ln -s "/home/partageChefs" "/home/$department/$user";
             fi
 
             if ! grep "^$user:" /etc/passwd
             then
-                sudo useradd -d "/home/$department/$user" -c "$firstname $name" "$user"
-                echo -e "$password\n$password" | sudo passwd "$user"
-                sudo adduser "$user" "$department"
-                sudo ln -sf "/home/partage$department" "/home/$department/$user"
+                sudo useradd -d "/home/$department/$user" -c "$firstname $name" "$user";
+                echo -e "$password\n$password" | sudo passwd "$user";
+                sudo adduser "$user" "$department";
+                sudo ln -s "/home/partage$department" "/home/$department/$user";
             fi
             
         fi
