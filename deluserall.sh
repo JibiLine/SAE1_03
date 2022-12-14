@@ -4,6 +4,8 @@ do
     sudo groupdel "$department"
     sudo deluser "$user"
     sudo groupdel "$user"
+    sudo rm -r -f "/home/$user"
+    sudo rm -r -f "/home/$department"
 done < $1
 clear
 
