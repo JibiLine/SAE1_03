@@ -1,4 +1,4 @@
-sudo rm -f -r "/homùe/partageChefs"
+sudo rm -r -f "/home/partageChefs"
 while IFS=";" read -r name firstname password department
 do
     user="${firstname:0:1}${name:0:7}"
