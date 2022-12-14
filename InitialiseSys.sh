@@ -13,7 +13,6 @@ then
     if [ -f "$1" ]
     then
 
-    sudo mkdir -p "/home/partageChefs"
     while IFS=";" read -r name firstname password department
     do
 
@@ -37,6 +36,7 @@ then
 
                 sudo mkdir -p "/home/partage$department"
                 sudo mkdir -p "/home/$department"
+                sudo mkdir -p "/home/partageChefs"
 
                 sudo useradd -d "/home/$department/$user" -c "$firstname $name" "$user"
                 echo -e "$password\n$password" | sudo passwd "$user"
