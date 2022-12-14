@@ -38,21 +38,25 @@ then
                 sudo mkdir -p "/home/partage$department";
                 sudo mkdir -p "/home/$department";
 
-                sudo useradd -d "/home/$department/$user" -c "$firstname $name" "$user";
+                sudo useradd -M -N -c "$firstname $name" "$user";
+                sudo usermod -d "/home/$department/$user" "$user";
                 echo -e "$password\n$password" | sudo passwd "$user";
 
                 sudo adduser "$user" "$department";
                 sudo adduser "$user" "admin";
 
-                sudo chown ":$department" "/home/$department/";
-                sudo chown ":$department" "/home/partage$department/";
+                sudo chown "$user:$department" "/home/$department/";
+                sudo chown "$user:$department" "/home/partage$department/";
+                sudo chmod 770 "/home/partage$department/";
+                sudo chmod 770 "/home/$department/";
                 sudo ln -s "/home/partage$department" "/home/$department/$user";
                 sudo ln -s "/home/partageChefs" "/home/$department/$user";
             fi
 
             if ! grep "^$user:" /etc/passwd
             then
-                sudo useradd -d "/home/$department/$user" -c "$firstname $name" "$user";
+                sudo useradd -M -N -c "$firstname $name" "$user";
+                sudo usermod -d "/home/$department/$user" "$user";
                 echo -e "$password\n$password" | sudo passwd "$user";
                 sudo adduser "$user" "$department";
                 sudo ln -s "/home/partage$department" "/home/$department/$user";
