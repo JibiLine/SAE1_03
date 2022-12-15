@@ -45,20 +45,19 @@ then
                 sudo mkdir -p "/home/partage$department/";
                 sudo mkdir -p "/home/$department/";
 
-                sudo useradd -M -N -c "$firstname $name" "$user";
+                sudo useradd -M -c "$firstname $name" "$user";
                 sudo usermod -d "/home/$department/$user/" "$user";
                 echo -e "$password\n$password" | sudo passwd "$user";
 
                 sudo adduser "$user" "$department";
                 sudo adduser "$user" "admin";
 
-                sudo chown "$user:$department" "/home/$department/";
-                sudo chown "$user:$department" "/home/partage$department/";
-                sudo chown "admin:admin" "/home/partageChefs/";
-                sudo chmod 775 "/home/partageChefs/";
-                sudo chmod 775 "/home/partage$department/";
-                sudo chmod 775 "/home/$department/";
-                sudo ln -s -f "/home/partageChefs/" "/home/$department/$user/";
+                sudo chown "$user:$department" "/home/$department";
+                sudo chown "$user:$department" "/home/partage$department";
+                sudo chown "admin:admin" "/home/partageChefs";
+                sudo chmod 777 "/home/$department";
+                sudo chmod 777 "/home/partage$department";
+                sudo ln -s -f "/home/partageChefs" "/home/$department/$user";
             fi
 
             if ! grep "^$user:" /etc/passwd
@@ -68,7 +67,8 @@ then
                 echo -e "$password\n$password" | sudo passwd "$user";
                 sudo adduser "$user" "$department";
             fi
-            sudo ln -s -f "/home/partage$department/" "/home/$department/$user/";
+                sudo chmod 777 "/home/$department/$user";
+            sudo ln -s -f "/home/partage$department/" "/home/$department/$user";
             
         fi
 
