@@ -17,21 +17,7 @@ then
     while IFS=";" read -r name firstname password department
     do
 
-        if [ "$name" != "Nom" ]
-        then
-
-            user="${firstname:0:1}${name:0:7}"
-
-            echo -e "
-            $user
-            $name
-            $firstname
-            $password
-            $department
-            "
-
-
-            if ! grep "^$department:" /etc/group
+        if ! grep "^$department:" /etc/group
             then
                 sudo groupadd "$department";
 
@@ -47,19 +33,25 @@ then
 
                 sudo chown "$user:$department" "/home/$department/";
                 sudo chown "$user:$department" "/home/partage$department/";
+                sudo chown "admin:admin" "/home/partageChefs";
+                sudo chown "$user" "/home/$department/$user";
+                sudo chmod 700 "/home/$department/$user";
+                sudo chmod 770 "/home/partageChefs";
                 sudo chmod 770 "/home/partage$department/";
                 sudo chmod 770 "/home/$department/";
-                sudo ln -s "/home/partage$department" "/home/$department/$user";
-                sudo ln -s "/home/partageChefs" "/home/$department/$user";
+                sudo ln -s -f "/home/partage$department" "/home/$department/$user";
+                sudo ln -s -f "/home/partageChefs" "/home/$department/$user";
             fi
 
             if ! grep "^$user:" /etc/passwd
             then
                 sudo useradd -M -N -c "$firstname $name" "$user";
                 sudo usermod -d "/home/$department/$user" "$user";
+                chown "$user" "/home/$department/$user";
+                chmod 700 "/home/$department/$user";
                 echo -e "$password\n$password" | sudo passwd "$user";
                 sudo adduser "$user" "$department";
-                sudo ln -s "/home/partage$department" "/home/$department/$user";
+                sudo ln -s -f "/home/partage$department" "/home/$department/$user";
             fi
             
         fi
